@@ -1,0 +1,35 @@
+$border:#ddd;
+* {
+	user-select: none
+}
+
+#pagination {
+	text-align: right
+}
+
+.page_nav {
+	cursor: pointer;
+	border: 1px solid $border;
+	padding: 4px 12px;
+	border-radius: 20px;
+}
+
+strong {
+	font-size: 25px;
+	margin-right: 6px
+}
+
+.desc {
+	font-size: 16px;
+	letter-spacing: 2px;
+}
+
+input {
+	width: 66px;
+	font-size: 15px;
+	padding: 4px 8px;
+	margin-left: 10px;
+	outline: none;
+	border: 1px solid $border;
+	border-radius: 4px;
+}

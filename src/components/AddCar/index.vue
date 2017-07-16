@@ -12,12 +12,12 @@
                 label.col-sm-2.control-label 型号
                 .col-sm-10
                     input.form-control(:value='carData.model',@change='updateMessage($event,"model")')
+
             .form-group
                 label.col-sm-2.control-label 车型
                 .col-sm-10
-                    select.form-control(:value='carData.type',@change='updateMessage($event,"type")')
-                        option(value='',seleted disabled) 请选择车型
-                        option(:value='t',v-for='t in aboutAdd.carType') {{t}}
+                    input.form-control(:value='carData.type',@change='updateMessage($event,"type")')
+
             .form-group
                 label.col-sm-2.control-label 排量
                 .col-sm-10
@@ -72,9 +72,9 @@
                 label.col-sm-2.control-label <span class='must'>*</span>图片
                 .col-sm-10
                     #car_img
-                        #showImg.margin-right-16
-                            .mask.size(v-show='carData.img')
-                                span 修改
+                        #showImg.margin-right-16(:class='{modifyImg:carData.img}')
+                            #pickfiles.mask.size
+                                span(v-show='carData.img') 修改
                             img.size(:src='carData.img',v-if='carData.img')
                         a(:href='carData.img',v-show='carData.img',target="_blank") 查看大图
 
@@ -88,82 +88,8 @@
 
 </template>
 
-
 <style scoped lang='scss'>
-.size {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.positionCenter {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate3d(-50%, -50%, 0);
-}
-
-.must {
-    color: red;
-    font-size: 14px;
-}
-
-#car_img {
-    text-align: left;
-}
-
-#showImg {
-    width: 100px;
-    height: 100px;
-    position: relative;
-    border: 1px solid gray;
-    display: inline-block;
-    overflow: hidden;
-    box-sizing: content-box;
-    cursor: pointer;
-    user-select: none;
-
-    &:after,
-    &:before {
-        content: "";
-        background: gray;
-        @extend .positionCenter
-    }
-
-    &:before {
-        width: 40px;
-        height: 2px;
-    }
-
-    &:after {
-        width: 2px;
-        height: 40px;
-    }
-
-    .mask {
-        z-index: 100;
-        top: -100%;
-        transition: .4s linear all;
-        background: rgba(0, 0, 0, .5);
-        span {
-            @extend .positionCenter;
-            color: #fff;
-            font-size: 20px;
-        }
-    }
-
-    &:hover {
-        .mask {
-            top: 0;
-        }
-    }
-
-    img {
-        z-index: 99
-    }
-}
+@import './addCar'
 </style>
 
 
@@ -177,19 +103,19 @@ function isTel({ num, msg }) {
     return true
 }
 
-function isEmpty({ num, msg }) {	// 判断是否为空
-    if (num.trim() == '') {
+function isEmpty(num, msg) {	// 判断是否为空
+    if ((/^\s*$/).test(num)) {
         alert(msg);
-        return false
+        return true
     }
-    return true
+    return false
 }
-
 
 export default {
     data() {
         return {
-            // imgCover: ''
+            uploader: null,
+            uploaderToken: ''
         }
     },
     computed: {
@@ -208,16 +134,38 @@ export default {
     },
     methods: {
         addCar() {
-            this.$store.dispatch('ADD_CAR').then(res => {
-                this.$router.push({ name: 'carList' })
-            })
+            if (this.validTest()) {
+                this.$store.dispatch('ADD_CAR').then(res => {
+                    this.$router.push({ name: 'carList' })
+                })
+            }
+
         },
         changeCar() {
-            this.$store.dispatch('MODIFY_CAR', {
-                _id: this.$route.params.carId
-            }).then(res => {
-                this.$router.push({ name: 'carList' })
-            })
+            if (this.validTest()) {
+                this.$store.dispatch('MODIFY_CAR', {
+                    _id: this.$route.params.carId
+                }).then(res => {
+                    this.$router.push({ name: 'carList' })
+                })
+            }
+        },
+
+        validTest() {
+            let testAry = [
+                { key: this.carData.brand, msg: '品牌不能为空' },
+                { key: this.carData.max, msg: '总量不能为空' },
+                { key: this.carData.store_price, msg: '门店价不能为空' },
+                { key: this.carData.online_price, msg: '线上价为空' },
+                { key: this.carData.img, msg: '图片不能为空' },
+            ]
+            for (let i = 0; i < testAry.length; i++) {
+                if (isEmpty(testAry[i].key, testAry[i].msg)) {
+                    return false;
+                }
+            }
+
+            return true
         },
         updateMessage(e, key) {	// 解决vuex与表单不同步问题
             this.$store.commit('UPDATE_MSG', {
@@ -226,21 +174,64 @@ export default {
                 type: 'carData'
             })
         },
+        uploader_img() {			//七牛上传图片配置
+            let _this = this;
+            this.uploader = Qiniu.uploader({
+                runtimes: 'html5,flash,html4',
+                browse_button: 'pickfiles',
+                uptoken: _this.uploaderToken,
+                domain: 'qiniu.xtongtong.com',
+                get_new_uptoken: false,
+                container: 'showImg',
+                max_file_size: '100mb',
+                flash_swf_url: 'http://cdn.staticfile.org/Plupload/2.1.1/Moxie.swf',
+                max_retries: 3,
+                dragdrop: false,
+                chunk_size: '4mb',
+                auto_start: true,
+                unique_names: false,
+                save_key: false,
+                multi_selection: false,
+                init: {
+                    'FileUploaded': function (up, file, info) {
+
+                        let formatInfo = JSON.parse(info);
+                        // // _this.uploaderFiles.push(formatInfo.key);
+                        // // 插入图片
+                        // _this.noticeWords = ['上', '传', '成', '功'];
+                        // _this.showNotice = false;
+                        // _this.insertImg(formatInfo.key);
+
+                        _this.$store.commit('MODIFY_IMG', `http://ordbfbebw.bkt.clouddn.com/${formatInfo.key}`)
+
+
+                    },
+                    'UploadComplete': function () {
+                    }
+                }
+            });
+        },
     },
     mounted() {
         if (!this.isLogin) {
             this.$router.push({ name: 'login' });
             return;
         }
-        this.$store.dispatch('CAR_TYPE').then(res => {
-            if (this.$route.name == 'carDetail') {
 
-                this.$store.dispatch('CAR_DETAIL', {
-                    _id: this.$route.params.carId,
-                    isAdd: false
-                })
-            }
+        // 
+        this.$store.dispatch('QINIU_TOKEN').then(res => {
+            this.uploaderToken = res;
+            this.uploader_img();
+
         })
+
+        if (this.$route.name == 'carDetail') {
+
+            this.$store.dispatch('CAR_DETAIL', {
+                _id: this.$route.params.carId,
+                isAdd: false
+            })
+        }
 
     }
 }

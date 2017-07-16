@@ -6,7 +6,6 @@ import store from '../vuex/store'
 const service = axios.create({
     baseURL: 'http://118.190.45.22/',  // 基础url,
     transformRequest: [function (data) {
-        console.log(qs.stringify(data))
         return qs.stringify(data);
     }]
 })
@@ -19,7 +18,6 @@ service.interceptors.request.use(config => {
         config.headers['phone'] = store.state.user.info.phone
     }
 
-    console.log(config)
 
     return config;
 }, err => {

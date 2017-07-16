@@ -21,10 +21,11 @@ import {
     PULL_CAR_LIST,
     CAR_DETAIL,
     ADD_CAR,
-    CAR_TYPE,
+    QINIU_TOKEN,
     UPDATE_CAR_LIST,
     MODIFY_CAR,
-    CLEAR_COOKIE
+    CLEAR_COOKIE,
+    MODIFY_IMG
 } from './mutation-type'
 
 const store = {
@@ -52,7 +53,7 @@ const store = {
             type: '',
             output: '',
             contoller: '',
-            img: 'https://avatars4.githubusercontent.com/u/12515800?v=4&s=460',
+            img: '',
             capacity: '',
             max: '',
             store_price: '',
@@ -102,6 +103,10 @@ const store = {
         [CLEAR_COOKIE](state) {
             state.user.token = '';
             state.user.info.phone = ''
+        },
+
+        [MODIFY_IMG](state,address){
+            state.carData.img = address;
         }
     },
     actions: {
@@ -153,11 +158,10 @@ const store = {
             })
         },
 
-        [CAR_TYPE]({ state }) {     // 获取汽车类型
+        [QINIU_TOKEN]({ state }) {     // 获取七牛token
             return new Promise((resolve, reject) => {
-                fetch.get('/cars/type/list').then(res => {
-                    state.addCar.carType = res.data;
-                    resolve(res)
+                fetch.get('/qiniu/token').then(res => {
+                    resolve(res.data)
                 })
             })
 

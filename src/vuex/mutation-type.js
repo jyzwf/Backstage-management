@@ -16,7 +16,9 @@ export const UPDATE_CAR_LIST = 'UPDATE_CAR_LIST'    // 更新汽车列表
 
 export const CAR_DETAIL = 'CAR_DETAIL'  // 汽车详情
 
-export const CAR_TYPE = 'CAR_TYPE'    // 获取车辆类型
+export const QINIU_TOKEN = 'QINIU_TOKEN'    // 七牛token
+
+export const MODIFY_IMG = 'MODIFY_IMG'      // 修改图片
 
 export const ADD_CAR = 'ADD_CAR'    // 添加汽车信息
 
