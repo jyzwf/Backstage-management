@@ -3,7 +3,7 @@
     #topBar
         span.logo 飞源租车
         #adminer
-            img#avator.radius(src="../../assets/logo.png")
+            img#avator.radius(src="../../assets/logo.jpg")
             button.btn.btn-default.btn-xs(@click='logout',v-if='isLogin') 退出
             button.btn.btn-info.btn-xs(@click='login',v-if='!isLogin') 登录
 </template>
@@ -32,6 +32,7 @@
     width: 2.4rem;
     height: 2.4rem;
     margin-right: 2rem;
+    border: 1px solid gray;
 }
 </style>
 
@@ -39,8 +40,8 @@
 <script>
 import Cookie from 'js-cookie'
 export default {
-    computed:{
-        isLogin(){
+    computed: {
+        isLogin() {
             return this.$store.state.user.token
         }
     },
