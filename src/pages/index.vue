@@ -4,8 +4,8 @@
         .container
             //- 下面是各个路由链接，在router->index配置好路由后，在这里进行导航
             .left_nav
-                a 首页
-                a 第二页
+                button.btn.btn-default.btn-xs(@click='cars') 车辆管理
+                button.btn.btn-default.btn-xs(@click='idcards') 身份认证管理
             .right_nav
                 router-view
 </template>
@@ -20,12 +20,13 @@
         width: 200px;
         bottom: 0;
         top: 40px;
-        padding-top: 50px;
+        padding-top: 20px;
         border-right: 1px solid gray;
 
-        a {
+        button {
             display: block;
             height: 48px;
+            width: 100%;
             line-height: 48px;
             text-align: center;
             text-decoration: none;
@@ -57,6 +58,14 @@ import TopBar from '@/components/TopBar'
 export default {
     components: {
         TopBar
+    },
+    methods: {
+        cars() {
+            this.$router.push({ path: '/' })
+        },
+        idcards() {
+            this.$router.push({ path: '/idcards' })
+        }
     }
 }
 </script>

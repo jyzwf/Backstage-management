@@ -1,7 +1,7 @@
 // 顶部栏
 <template lang='jade'>
     #topBar
-        span.logo 飞源租车
+        button.btn.btn-default.btn-xs(@click='index') 飞源租车
         #adminer
             img#avator.radius(src="../../assets/logo.jpg")
             button.btn.btn-default.btn-xs(@click='logout',v-if='isLogin') 退出
@@ -54,6 +54,9 @@ export default {
         },
         login() {
             this.$router.push({ name: 'login' })
+        },
+        index() {
+            this.$router.push({ name: 'idcards' })
         }
     }
 }

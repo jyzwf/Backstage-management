@@ -25,7 +25,11 @@ import {
     UPDATE_CAR_LIST,
     MODIFY_CAR,
     CLEAR_COOKIE,
-    MODIFY_IMG
+    MODIFY_IMG,
+    PULL_IDCARD_LIST,
+    UPDATE_IDCARD_LIST,
+    PASS_IDCARD,
+    FAIL_IDCARD
 } from './mutation-type'
 
 const store = {
@@ -41,6 +45,11 @@ const store = {
             list: [],     // 存放汽车列表
             nowPage: 1,  // 当前车列表页数
             totalPage: 1     // 列表总页数
+        },
+        idcardList: {
+            list: [],   
+            nowPage: 1,
+            totalPage: 1
         },
         addCar: {
             isAdd: true,
@@ -99,7 +108,10 @@ const store = {
             state.carList.list = list
             state.carList.totalPage = counter
         },
-
+        [UPDATE_IDCARD_LIST](state, { list, counter }) {
+            state.idcardList.list = list
+            state.idcardList.totalPage = counter
+        },
         [CLEAR_COOKIE](state) {
             state.user.token = '';
             state.user.info.phone = ''
@@ -114,6 +126,18 @@ const store = {
             fetch.delete(`/admin/cars/${id}`).then(res => {
                 state.carList.list.splice(index, 1)
                 alert('删除成功')
+            })
+        },
+        [PASS_IDCARD]({ state }, { id, index }) {    // 通过审核
+            fetch.put(`/admin/idcards/${id}/confirm`).then(res => {
+                state.idcardList.list.splice(index, 1)
+                alert('审核通过')
+            })
+        },
+        [FAIL_IDCARD]({ state }, { id, index }) {    // 拒绝通过审核
+            fetch.put(`/admin/idcards/${id}/confuse`).then(res => {
+                state.idcardList.list.splice(index, 1)
+                alert('已拒绝')
             })
         },
 
@@ -134,6 +158,17 @@ const store = {
                     resolve(res)
                 }).catch(error => {
                     reject(error)
+                })
+            })
+        },
+
+        [PULL_IDCARD_LIST]({ state, commit }, paging) {    // 拉取汽车信息
+            commit('OPERATE_PAGE', paging)
+            fetch.get(`/admin/idcards`).then(res => {
+                let d = res.data
+                commit('UPDATE_IDCARD_LIST', {
+                    list: d.lists,
+                    counter: d.total
                 })
             })
         },
