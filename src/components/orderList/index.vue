@@ -3,15 +3,15 @@
         header
             h1 订单列表
         
-        ul.nav.nav-pills
-            li.active(role='presentation')
-                a(href='#') 预约中
+        ul#select.nav.nav-pills
+            li(role='presentation', v-bind:class='{active: isActive1}')
+                a(@click='get_wait()', v-if='isLogin') 预约中
             |   
-            li(role='presentation')
-                a(href='#') 进行中
+            li(role='presentation', v-bind:class='{active: isActive2}')
+                a(@click='get_pro()', v-if='isLogin') 进行中
             |   
-            li(role='presentation')
-                a(href='#') 已取消
+            li(role='presentation', v-bind:class='{active: isActive3}')
+                a(@click='get_cancle()', v-if='isLogin') 已取消
 
 
             
@@ -25,7 +25,7 @@
                     th 是否实名
                     th 金额
                     th 当前状态
-                    td 操作
+                    td(v-if = 'isShow') 操作
             
             tbody
                 tr(v-for='(order,index) in orderList')
@@ -39,8 +39,9 @@
                         {{'未实名'}}
                     td {{order.price}}
                     td {{order.type}}
-                    td
-                        button.btn.btn-info.btn-xs.margin-right-4(@click='pass(order, index)', v-if='isLogin') 确认订单
+                    div.btn(v-if='isShow')
+                        td
+                            button.btn.btn-info.btn-xs.margin-right-4(@click='pass(order, index)', v-if='isLogin') 确认订单
         
 </template>
 
@@ -48,7 +49,11 @@
 export default {
     data() {
         return {
-            jumpPage: 1
+            jumpPage: 1,
+            isActive1: true,
+            isActive2: false,
+            isActive3: false,
+            isShow: true
         }
     },
     computed: {
@@ -70,7 +75,6 @@ export default {
                     index: i
                 })
             }
-            this.$router.push({ name: 'carDetail', params: { carId: info._id } })
         },
         fail(c, i) {
             if (this.isLogin && confirm('确认拒绝?')) {
@@ -79,6 +83,36 @@ export default {
                     index: i
                 })
             }
+        },
+        get_pro() {
+            this.$store.dispatch('PULL_ORDER_LIST_PRO', {
+                isJump: true,
+                jumpPage: 1
+            })
+            this.isActive1 = false
+            this.isActive2 = true
+            this.isActive3 = false
+            this.isShow = false
+        },
+        get_wait() {
+            this.$store.dispatch('PULL_ORDER_LIST_WAIT', {
+                isJump: true,
+                jumpPage: 1
+            })
+            this.isActive1 = true
+            this.isActive2 = false
+            this.isActive3 = false
+            this.isShow = true
+        },
+        get_cancle() {
+            this.$store.dispatch('PULL_ORDER_LIST_CANCLE', {
+                isJump: true,
+                jumpPage: 1
+            })
+            this.isActive1 = false
+            this.isActive2 = false
+            this.isActive3 = true
+            this.isShow = false
         }
     },
     mounted() {
@@ -108,5 +142,10 @@ a {
 h1 {
     margin-bottom: 35px;
 }
+
+#select{
+    margin-bottom: 20px
+}
+
 </style>
 

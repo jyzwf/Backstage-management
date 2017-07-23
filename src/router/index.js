@@ -2,9 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/pages/index'
 
+import orders from './orders'
+
 Vue.use(Router)
 
-export default new Router({
+const body = {
   routes: [
     {
       path: '/',
@@ -53,18 +55,8 @@ export default new Router({
         }
       ]
     },
-    {
-      path: '/orders',
-      component: Home,
-      children: [
-        {
-          path: '',
-          component(resolve) {
-            require(['@/components/orderList'], resolve)
-          }
-        }
-      ]
-    }
-
+    orders.wait
   ]
-})
+}
+
+export default new Router(body)
