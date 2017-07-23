@@ -4,6 +4,7 @@
         .container
             //- 下面是各个路由链接，在router->index配置好路由后，在这里进行导航
             .left_nav
+                button.btn.btn-default.btn-xs(@click='orders') 订单管理
                 button.btn.btn-default.btn-xs(@click='cars') 车辆管理
                 button.btn.btn-default.btn-xs(@click='idcards') 身份认证管理
             .right_nav
@@ -60,6 +61,9 @@ export default {
         TopBar
     },
     methods: {
+        orders(){
+            this.$router.push({path: '/orders'})
+        },
         cars() {
             this.$router.push({ path: '/' })
         },

@@ -52,6 +52,18 @@ export default new Router({
           }
         }
       ]
+    },
+    {
+      path: '/orders',
+      component: Home,
+      children: [
+        {
+          path: '',
+          component(resolve) {
+            require(['@/components/orderList'], resolve)
+          }
+        }
+      ]
     }
 
   ]

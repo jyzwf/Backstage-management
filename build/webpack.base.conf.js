@@ -2,12 +2,14 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+const vuxLoader = require('vux-loader')
+const webpackConfig = originalConfig // 原来的 module.exports 代码赋值给变量 webpackConfig
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
-module.exports = {
+originalConfig = {
   entry: {
     app: './src/main.js'
   },
@@ -65,3 +67,7 @@ module.exports = {
     ]
   }
 }
+
+module.exports = vuxLoader.merge(webpackConfig, {
+  plugins: ['vux-ui']
+})

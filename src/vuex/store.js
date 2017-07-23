@@ -29,7 +29,10 @@ import {
     PULL_IDCARD_LIST,
     UPDATE_IDCARD_LIST,
     PASS_IDCARD,
-    FAIL_IDCARD
+    FAIL_IDCARD,
+    PULL_ORDER_LIST_WAIT,
+    UPDATE_ORDER_LIST,
+    PASS_ORDERS
 } from './mutation-type'
 
 const store = {
@@ -48,6 +51,11 @@ const store = {
         },
         idcardList: {
             list: [],   
+            nowPage: 1,
+            totalPage: 1
+        },
+        orderList: {
+            list: [],
             nowPage: 1,
             totalPage: 1
         },
@@ -112,6 +120,10 @@ const store = {
             state.idcardList.list = list
             state.idcardList.totalPage = counter
         },
+        [UPDATE_ORDER_LIST](state, { list, counter }) {
+            state.orderList.list = list
+            state.orderList.totalPage = counter
+        },
         [CLEAR_COOKIE](state) {
             state.user.token = '';
             state.user.info.phone = ''
@@ -138,6 +150,12 @@ const store = {
             fetch.put(`/admin/idcards/${id}/confuse`).then(res => {
                 state.idcardList.list.splice(index, 1)
                 alert('已拒绝')
+            })
+        },
+        [PASS_ORDERS]({ state }, { id, index }) {    // 通过审核
+            fetch.put(`/admin/orders/${id}/confirm`).then(res => {
+                state.orderList.list.splice(index, 1)
+                    alert('确认成功')
             })
         },
 
@@ -172,11 +190,23 @@ const store = {
                 })
             })
         },
+        
+        [PULL_ORDER_LIST_WAIT]({ state, commit }, paging) {    // 拉取订单信息
+            commit('OPERATE_PAGE', paging)
+            fetch.get(`/admin/orders/?count=10&page=${state.orderList.nowPage}&type=预约中`).then(res => {
+                let d = res.data
+                commit('UPDATE_ORDER_LIST', {
+                    list: d.orders,
+                    counter: d.total
+                })
+            })
+        },
 
         [PULL_CAR_LIST]({ state, commit }, paging) {    // 拉取汽车信息
             commit('OPERATE_PAGE', paging)
             fetch.get(`/admin/cars?count=10&page=${state.carList.nowPage}`).then(res => {
                 let d = res.data
+                console.log(d)
                 commit('UPDATE_CAR_LIST', {
                     list: d.cars,
                     counter: d.total

@@ -35,11 +35,9 @@
                         button.btn.btn-info.btn-xs.margin-right-4(@click='pass(c, index)', v-if='isLogin') 通过
                         button.btn.btn-danger.btn-xs(@click='fail(c, index)',v-if='isLogin') 拒绝
         
-        Pagination
 </template>
 
 <script>
-import Pagination from '@/components/Pagination'
 
 export default {
     data() {
@@ -57,9 +55,6 @@ export default {
         isLogin() {
             return this.$store.state.user.token
         }
-    },
-    components: {
-        Pagination
     },
     methods: {
         pass(c, i) {

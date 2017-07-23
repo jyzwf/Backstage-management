@@ -9,27 +9,27 @@
                     input.form-control(:value='carData.brand',@change='updateMessage($event,"brand")')
 
             .form-group
-                label.col-sm-2.control-label 型号
+                label.col-sm-2.control-label <span class='must'>*</span>型号
                 .col-sm-10
                     input.form-control(:value='carData.model',@change='updateMessage($event,"model")')
 
             .form-group
-                label.col-sm-2.control-label 车型
+                label.col-sm-2.control-label <span class='must'>*</span>车型
                 .col-sm-10
                     input.form-control(:value='carData.type',@change='updateMessage($event,"type")')
 
             .form-group
-                label.col-sm-2.control-label 排量
+                label.col-sm-2.control-label <span class='must'>*</span>排量
                 .col-sm-10
                     input.form-control(:value='carData.output',@change='updateMessage($event,"output")')
             
             .form-group
-                label.col-sm-2.control-label 驾驶方式
+                label.col-sm-2.control-label <span class='must'>*</span>驾驶方式
                 .col-sm-10
                     input.form-control(:value='carData.contoller',@change='updateMessage($event,"contoller")')
 
             .form-group
-                label.col-sm-2.control-label 容坐量
+                label.col-sm-2.control-label <span class='must'>*</span>容坐量
                 .col-sm-10
                     input.form-control(:value='carData.capacity',@change='updateMessage($event,"capacity")')
 
