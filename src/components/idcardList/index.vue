@@ -1,7 +1,7 @@
 <template lang='jade'>
     #carList
         header
-            h1 身份认证列表
+            h1.text-left 身份认证列表
             
         table.table.table-bordered.table-hover
             thead

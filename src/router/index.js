@@ -11,6 +11,18 @@ const body = {
     {
       path: '/',
       component: Home,
+      name: 'index',
+      meta: { requiresAuth: true },
+      children: [{
+        path: '',
+        component(resolve) { 
+          require(['@/components'], resolve)
+        }
+      }]
+    },
+    {
+      path: '/cars',
+      component: Home,
       name: 'cars',
       children: [{
         path: '',
@@ -29,7 +41,6 @@ const body = {
         path: 'carDetail/:carId',
         name: 'carDetail',
         meta: { requiresAuth: true },
-
         component(resolve) {
           require(['@/components/AddCar'], resolve)
         }
@@ -45,6 +56,7 @@ const body = {
     {
       path: '/idcards',
       name: 'idcards',
+      meta: { requiresAuth: true },
       component: Home,
       children: [
         {

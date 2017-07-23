@@ -57,6 +57,11 @@ const store = {
       fuel: '',
       abrasion: '',
       oil_box: ''
+    },
+    index: {
+      totalUser: null,
+      orderNum: null,
+      orderPrice: null
     }
   },
   mutations: {
@@ -109,6 +114,11 @@ const store = {
 
     [type.MODIFY_IMG](state, address) {
       state.carData.img = address
+    },
+    [type.INDEX_ADD](state, params) {
+      state.index.totalUser = params.userNum
+      state.index.orderNum = params.orderNum
+      state.index.orderPrice = params.orderPrice
     }
   },
   actions: {
@@ -254,6 +264,11 @@ const store = {
         fetch.post('/admin/cars', state.carData).then(res => {
           resolve(res)
         })
+      })
+    },
+    [type.PULL_INDEX]({ state, commit }) {
+      fetch.get(`/admin/index`).then(res => {
+        commit('INDEX_ADD', res.data)
       })
     }
 

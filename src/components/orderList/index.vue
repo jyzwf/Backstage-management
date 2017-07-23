@@ -1,7 +1,7 @@
 <template lang='jade'>
     #carList
         header
-            h1 订单列表
+            h1.text-left 订单列表
         
         ul#select.nav.nav-pills
             li(role='presentation', v-bind:class='{active: isActive1}')
@@ -19,17 +19,20 @@
             thead
                 tr
                     th 序号
+                    th 用户名                    
                     th 真实姓名
                     th 联系方式
                     th 车型
                     th 是否实名
                     th 金额
+                    th 下单时间
                     th 当前状态
                     td(v-if = 'isShow') 操作
             
             tbody
                 tr(v-for='(order,index) in orderList')
                     td {{(nowPage - 1) * 10 + index + 1}}
+                    td {{order._userId.nickname}}
                     td {{order._userId.realname}}
                     td {{order._userId.phone}}
                     td {{order._carId.brand}}{{order._carId.model}}
@@ -38,6 +41,7 @@
                     td(v-else)
                         {{'未实名'}}
                     td {{order.price}}
+                    td {{date_format(order.created_time)}}
                     td {{order.type}}
                     div.btn(v-if='isShow')
                         td
@@ -46,6 +50,8 @@
 </template>
 
 <script>
+import moment from 'moment'
+moment.locale('zh-cn')
 export default {
     data() {
         return {
@@ -113,6 +119,9 @@ export default {
             this.isActive2 = false
             this.isActive3 = true
             this.isShow = false
+        },
+        date_format(params) {
+            return moment(params).format('YYYY-MM-D hh:mm:ss')
         }
     },
     mounted() {
@@ -143,9 +152,8 @@ h1 {
     margin-bottom: 35px;
 }
 
-#select{
+#select {
     margin-bottom: 20px
 }
-
 </style>
 
