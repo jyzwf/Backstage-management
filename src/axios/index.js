@@ -4,7 +4,7 @@ import store from '../vuex/store'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://118.190.45.22/', // 基础url,
+  baseURL: 'http://101.200.63.82:4001/', // 基础url,
   transformRequest: [function (data) {
     return qs.stringify(data)
   }]
