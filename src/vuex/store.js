@@ -170,7 +170,7 @@ const store = {
 
     [type.PULL_IDCARD_LIST]({ state, commit }, paging) { // 拉取汽车信息
       commit('OPERATE_PAGE', paging)
-      fetch.get(`/admin/idcards`).then(res => {
+      fetch.get(`/admin/idcards/?type=0`).then(res => {
         let d = res.data
         commit('UPDATE_IDCARD_LIST', {
           list: d.lists,
@@ -183,6 +183,7 @@ const store = {
       commit('OPERATE_PAGE', paging)
       fetch.get(`/admin/orders/?count=10&page=${state.orderList.nowPage}&type=预约中`).then(res => {
         let d = res.data
+        console.log(d)
         commit('UPDATE_ORDER_LIST', {
           list: d.orders,
           counter: d.total

@@ -25,6 +25,7 @@
                     th 车型
                     th 是否实名
                     th 金额
+                    th 是否支付
                     th 下单时间
                     th 当前状态
                     td(v-if = 'isShow') 操作
@@ -32,15 +33,28 @@
             tbody
                 tr(v-for='(order,index) in orderList')
                     td {{(nowPage - 1) * 10 + index + 1}}
-                    td {{order._userId.nickname}}
-                    td {{order._userId.realname}}
-                    td {{order._userId.phone}}
+                    td(v-if= 'order._userId')
+                      {{order._userId.nickname}}
+                    td(v-else)
+                        {{''}}
+                    td(v-if= 'order._userId')
+                      {{order._userId.realname}}
+                    td(v-else)
+                        {{''}}
+                    td(v-if= 'order._userId')
+                      {{order._userId.phone}}
+                    td(v-else)
+                        {{''}}
                     td {{order._carId.brand}}{{order._carId.model}}
-                    td(v-if='order._userId.isChecked === true')
+                    td(v-if='order._userId && order._userId.isChecked === true')
                         {{'已实名'}}
                     td(v-else)
                         {{'未实名'}}
                     td {{order.price}}
+                    td(v-if='order.isPayed === true')
+                        {{'已支付'}}
+                    td(v-else)
+                        {{'未支付'}}
                     td {{date_format(order.created_time)}}
                     td {{order.type}}
                     div.btn(v-if='isShow')

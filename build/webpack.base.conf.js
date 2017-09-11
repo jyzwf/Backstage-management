@@ -2,13 +2,12 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
-const vuxLoader = require('vux-loader')
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
-const originalConfig = {
+module.exports = {
   entry: {
     app: './src/main.js'
   },
@@ -61,13 +60,8 @@ const originalConfig = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      },
+      }
 
     ]
   }
 }
-const webpackConfig = originalConfig // 原来的 module.exports 代码赋值给变量 webpackConfig
-
-module.exports = vuxLoader.merge(webpackConfig, {
-  plugins: ['vux-ui']
-})
