@@ -5,8 +5,6 @@ import App from './App'
 import router from './router'
 import store from '@/vuex/store'
 
-import reset from '@/assets/css/reset'
-
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
@@ -15,7 +13,7 @@ router.beforeEach((to, from, next) => {
       path: '/login'
     })
   }
-  next();
+  next()
 })
 
 /* eslint-disable no-new */
