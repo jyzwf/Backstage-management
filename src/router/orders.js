@@ -7,7 +7,7 @@ export default{
     children: [
       {
         path: '',
-        component(resolve) {
+        component (resolve) {
           require(['@/components/orderList'], resolve)
         }
       }

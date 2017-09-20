@@ -1,17 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+// import qs from 'qs'
 import Cookies from 'js-cookie'
-
 import fetch from '../axios'
-import qs from 'qs'
+import type from './mutation-type'
 
 Vue.use(Vuex)
 
 // 每页数据条数
-const PAGE_ITEM = 10
-
-import type from './mutation-type'
+// const PAGE_ITEM = 10
 
 const store = {
   state: {
@@ -65,7 +62,7 @@ const store = {
     }
   },
   mutations: {
-    [type.OPERATE_PAGE](state, { isJump, s, jumpPage }) {
+    [type.OPERATE_PAGE] (state, { isJump, s, jumpPage }) {
       if (!isJump) {
         s == 1 ? state.carList.nowPage++ : state.carList.nowPage--
       } else {
@@ -73,7 +70,7 @@ const store = {
       }
     },
 
-    [type.OPERATE_ADD](state, { isAdd, carInfo }) {
+    [type.OPERATE_ADD] (state, { isAdd, carInfo }) {
       state.addCar.isAdd = isAdd
 
       if (isAdd) {
@@ -87,7 +84,7 @@ const store = {
       }
     },
 
-    [type.UPDATE_MSG](state, { v, key, type }) {
+    [type.UPDATE_MSG] (state, { v, key, type }) {
       if (type == 'info') {
         state.user.info[key] = v
       } else if (type == 'carData') {
@@ -95,59 +92,59 @@ const store = {
       }
     },
 
-    [type.UPDATE_CAR_LIST](state, { list, counter }) {
+    [type.UPDATE_CAR_LIST] (state, { list, counter }) {
       state.carList.list = list
       state.carList.totalPage = counter
     },
-    [type.UPDATE_IDCARD_LIST](state, { list, counter }) {
+    [type.UPDATE_IDCARD_LIST] (state, { list, counter }) {
       state.idcardList.list = list
       state.idcardList.totalPage = counter
     },
-    [type.UPDATE_ORDER_LIST](state, { list, counter }) {
+    [type.UPDATE_ORDER_LIST] (state, { list, counter }) {
       state.orderList.list = list
       state.orderList.totalPage = counter
     },
-    [type.CLEAR_COOKIE](state) {
+    [type.CLEAR_COOKIE] (state) {
       state.user.token = ''
       state.user.info.phone = ''
     },
 
-    [type.MODIFY_IMG](state, address) {
+    [type.MODIFY_IMG] (state, address) {
       state.carData.img = address
     },
-    [type.INDEX_ADD](state, params) {
+    [type.INDEX_ADD] (state, params) {
       state.index.totalUser = params.userNum
       state.index.orderNum = params.orderNum
       state.index.orderPrice = params.orderPrice
     }
   },
   actions: {
-    [type.DELETE_CAR]({ state }, { id, index }) { // 删除汽车
+    [type.DELETE_CAR] ({ state }, { id, index }) { // 删除汽车
       fetch.delete(`/admin/cars/${id}`).then(res => {
         state.carList.list.splice(index, 1)
         alert('删除成功')
       })
     },
-    [type.PASS_IDCARD]({ state }, { id, index }) { // 通过审核
+    [type.PASS_IDCARD] ({ state }, { id, index }) { // 通过审核
       fetch.put(`/admin/idcards/${id}/confirm`).then(res => {
         state.idcardList.list.splice(index, 1)
         alert('审核通过')
       })
     },
-    [type.FAIL_IDCARD]({ state }, { id, index }) { // 拒绝通过审核
+    [type.FAIL_IDCARD] ({ state }, { id, index }) { // 拒绝通过审核
       fetch.put(`/admin/idcards/${id}/confuse`).then(res => {
         state.idcardList.list.splice(index, 1)
         alert('已拒绝')
       })
     },
-    [type.PASS_ORDERS]({ state }, { id, index }) { // 通过审核
+    [type.PASS_ORDERS] ({ state }, { id, index }) { // 通过审核
       fetch.put(`/admin/orders/${id}/confirm`).then(res => {
         state.orderList.list.splice(index, 1)
         alert('确认成功')
       })
     },
 
-    [type.LOGIN]({ state }) { // 登录
+    [type.LOGIN] ({ state }) { // 登录
       return new Promise((resolve, reject) => {
         fetch.post('admin/login', state.user.info).then(res => { // 登录
           res = res.data
@@ -168,7 +165,7 @@ const store = {
       })
     },
 
-    [type.PULL_IDCARD_LIST]({ state, commit }, paging) { // 拉取汽车信息
+    [type.PULL_IDCARD_LIST] ({ state, commit }, paging) { // 拉取汽车信息
       commit('OPERATE_PAGE', paging)
       fetch.get(`/admin/idcards/?type=0`).then(res => {
         let d = res.data
@@ -179,7 +176,7 @@ const store = {
       })
     },
 
-    [type.PULL_ORDER_LIST_WAIT]({ state, commit }, paging) { // 拉取订单信息
+    [type.PULL_ORDER_LIST_WAIT] ({ state, commit }, paging) { // 拉取订单信息
       commit('OPERATE_PAGE', paging)
       fetch.get(`/admin/orders/?count=10&page=${state.orderList.nowPage}&type=预约中`).then(res => {
         let d = res.data
@@ -190,7 +187,7 @@ const store = {
         })
       })
     },
-    [type.PULL_ORDER_LIST_PRO]({ state, commit }, paging) { // 拉取订单信息
+    [type.PULL_ORDER_LIST_PRO] ({ state, commit }, paging) { // 拉取订单信息
       commit('OPERATE_PAGE', paging)
       fetch.get(`/admin/orders/?count=10&page=${state.orderList.nowPage}&type=租赁中`).then(res => {
         let d = res.data
@@ -200,7 +197,7 @@ const store = {
         })
       })
     },
-    [type.PULL_ORDER_LIST_CANCLE]({ state, commit }, paging) { // 拉取订单信息
+    [type.PULL_ORDER_LIST_CANCLE] ({ state, commit }, paging) { // 拉取订单信息
       commit('OPERATE_PAGE', paging)
       fetch.get(`/admin/orders/?count=10&page=${state.orderList.nowPage}&type=已取消`).then(res => {
         let d = res.data
@@ -211,7 +208,7 @@ const store = {
       })
     },
 
-    [type.PULL_CAR_LIST]({ state, commit }, paging) { // 拉取汽车信息
+    [type.PULL_CAR_LIST] ({ state, commit }, paging) { // 拉取汽车信息
       commit('OPERATE_PAGE', paging)
       fetch.get(`/admin/cars?count=10&page=${state.carList.nowPage}`).then(res => {
         let d = res.data
@@ -223,7 +220,7 @@ const store = {
       })
     },
 
-    [type.CAR_DETAIL]({ state, commit }, { _id, isAdd }) { // 汽车详情
+    [type.CAR_DETAIL] ({ state, commit }, { _id, isAdd }) { // 汽车详情
       fetch.get(`/cars/${_id}`).then(res => {
         commit('OPERATE_ADD', {
           isAdd,
@@ -232,7 +229,7 @@ const store = {
       })
     },
 
-    [type.QINIU_TOKEN]({ state }) { // 获取七牛token
+    [type.QINIU_TOKEN] ({ state }) { // 获取七牛token
       return new Promise((resolve, reject) => {
         fetch.get('/qiniu/token').then(res => {
           resolve(res.data)
@@ -240,10 +237,10 @@ const store = {
       })
     },
 
-    [type.MODIFY_CAR]({ state }, { _id }) { // 修改汽车信息
+    [type.MODIFY_CAR] ({ state }, { _id }) { // 修改汽车信息
       let temp = {}
       for (let i in state.carData) {
-        if (i != _id) {
+        if (i !== _id) {
           temp[i] = state.carData[i]
         }
       }
@@ -254,11 +251,11 @@ const store = {
       })
     },
 
-    [type.ADD_CAR]({ state }) {
+    [type.ADD_CAR] ({ state }) {
       return new Promise((resolve, reject) => {
         let temp = {}
         for (let i in state.carData) {
-          if (i != '_id') {
+          if (i !== '_id') {
             temp[i] = state.carData[i]
           }
         }
@@ -267,7 +264,7 @@ const store = {
         })
       })
     },
-    [type.PULL_INDEX]({ state, commit }) {
+    [type.PULL_INDEX] ({ state, commit }) {
       fetch.get(`/admin/index`).then(res => {
         commit('INDEX_ADD', res.data)
       })

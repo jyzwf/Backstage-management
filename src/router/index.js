@@ -15,7 +15,7 @@ const body = {
       meta: { requiresAuth: true },
       children: [{
         path: '',
-        component(resolve) { 
+        component (resolve) {
           require(['@/components'], resolve)
         }
       }]
@@ -27,21 +27,21 @@ const body = {
       children: [{
         path: '',
         name: 'carList',
-        component(resolve) {
+        component (resolve) {
           require(['@/components/CarList'], resolve)
         }
       }, {
         path: 'addCar',
         name: 'addCar',
         meta: { requiresAuth: true },
-        component(resolve) {
+        component (resolve) {
           require(['@/components/AddCar'], resolve)
         }
       }, {
         path: 'carDetail/:carId',
         name: 'carDetail',
         meta: { requiresAuth: true },
-        component(resolve) {
+        component (resolve) {
           require(['@/components/AddCar'], resolve)
         }
       }]
@@ -49,7 +49,7 @@ const body = {
     {
       path: '/login',
       name: 'login',
-      component(resolve) {
+      component (resolve) {
         require(['@/pages/login'], resolve)
       }
     },
@@ -61,7 +61,7 @@ const body = {
       children: [
         {
           path: '',
-          component(resolve) {
+          component (resolve) {
             require(['@/components/idcardList'], resolve)
           }
         }
