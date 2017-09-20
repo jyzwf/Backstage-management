@@ -1,7 +1,7 @@
 <template lang='jade'>
     #carList
         header
-            h1 汽车列表 <button class='btn btn-info pull-right btn-sm' @click='toAdd'>添加</button>
+            h1.text-left 汽车列表 <button class='btn btn-info pull-right btn-sm' @click='toAdd'>添加</button>
             
         table.table.table-bordered.table-hover
             thead
@@ -16,7 +16,7 @@
             tbody
                 tr(v-for='(c,index) in carList')
                     td {{(nowPage-1)*10+index+1}}
-                    td {{c.brand}}
+                    td {{c.model}}
                     td
                         a(:href='c.img',target="_blank")
                             img(:src='c.img')
