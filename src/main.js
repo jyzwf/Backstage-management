@@ -4,10 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from '@/vuex/store'
-
-import reset from '@/assets/css/reset'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-default/index.css'
 
 Vue.config.productionTip = false
+
+Vue.use(ElementUI)
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth) && !store.state.user.token) {
@@ -15,7 +17,7 @@ router.beforeEach((to, from, next) => {
       path: '/login'
     })
   }
-  next();
+  next()
 })
 
 /* eslint-disable no-new */

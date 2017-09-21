@@ -1,26 +1,24 @@
 // 顶部栏
 <template lang='jade'>
     #topBar
-        span.logo 飞源租车
+        img#avator.radius(src="../../assets/logo.jpg")
         #adminer
-            img#avator.radius(src="../../assets/logo.jpg")
-            button.btn.btn-default.btn-xs(@click='logout',v-if='isLogin') 退出
-            button.btn.btn-info.btn-xs(@click='login',v-if='!isLogin') 登录
+            button.btn.btn-info(@click='logout',v-if='isLogin') 退出
+            button.btn.btn-info(@click='login',v-if='!isLogin') 登录
 </template>
 
 <style scoped lang='scss'>
 #topBar {
+    background: #4682B4;
     position: fixed;
     display: flex;
-    height: 48px;
+    height: 60px;
     padding: 0 2rem;
     left: 0;
     top: 0;
     width: 100%;
     justify-content: space-between;
     align-items: center;
-    border-bottom: gray 1px solid;
-    background: #fff;
     z-index: 9;
 
     * {
